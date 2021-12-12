@@ -10,6 +10,9 @@ RUN apt-get install wget -qqy
 
 RUN docker-php-ext-install bcmath pdo pdo_mysql
 
+RUN apt-get install sendmail -qqy
+RUN echo "sendmail_path = /usr/sbin/sendmail -t" >> /usr/local/etc/php/conf.d/sendmail.ini && \
+    echo "sendmail_from = robot@vischool.ru" >> /usr/local/etc/php/conf.d/sendmail.ini
 
 RUN apt-get install -y libzip-dev
 RUN apt-get install -y zlib1g-dev \

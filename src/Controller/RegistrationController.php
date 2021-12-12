@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\UserDto;
 use App\Form\Type\RegistrationType;
+use App\Service\RegistrationEmailSender;
 use App\Service\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;

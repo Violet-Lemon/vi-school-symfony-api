@@ -265,7 +265,6 @@ class SupportRequestController extends AbstractController
         return null;
     }
 
-    //Вставка для фронтенда для редактирования записи
     /**
      * @Route("/edit/{id}", name="api.request.edit")
      */
@@ -287,6 +286,20 @@ class SupportRequestController extends AbstractController
 
         $supportRequest = $supportRequestRepository->findById($id);
 
+        if (is_null($supportRequest)) {
+            return $this->json([
+                'error'   => true,
+                'message' => sprintf('Не найдена заявка с id %s.', $id),
+            ]);
+        }
+
+        if ($supportRequest->getCreatedBy()->getId() !== $user->getId()) {
+            return $this->json([
+                'error'   => true,
+                'message' => 'Удалить заявку может только создатель',
+            ]);
+        }
+
         $requestDto = SupportRequestDTO::createFromEntity($supportRequest);
 
         $form = $this->createForm(SupportRequestType::class, $requestDto, [
@@ -303,9 +316,7 @@ class SupportRequestController extends AbstractController
 
                 return $this->json([
                     'success' => true,
-                    'data'    => [
-                        'id' => $supportRequest->getId(), //непонятно, что вернуть
-                    ],
+                    'data'    => $supportRequest->getData(),
                 ]);
             } else {
                 return $this->json([
